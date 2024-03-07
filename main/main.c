@@ -112,21 +112,15 @@ void beepToStart()
 //     return colors;
 // }
 
-int seedGenerator(){
-
-    time_t absolute_time = time(NULL);
-    
-    int seed = (int)absolute_time % 4;
-
-    return seed;
-}
 
 void addColor(int *lenght)
 {
-
     int leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
     // srand(seed); ---> seed = time_start (tempo em que a pessoa aperta o botão de start)
-    randomIndex = seedGenerator();                   // Gera um índice aleatório entre 0 e 3
+    // time_t seed = get_absolute_time; 
+    // srand(seed); 
+
+    randomIndex = rand() % 4;                    // Gera um índice aleatório entre 0 e 3
     // printf('cor = %lf', randomIndex);
     *lenght += 1;
     colors[*lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
@@ -252,6 +246,9 @@ int main()
     setup();
 
     beepToStart();
+
+    uint64_t start_us = to_us_since_boot(get_absolute_time());
+    srand(start_us); 
 
     while (1)
     {
