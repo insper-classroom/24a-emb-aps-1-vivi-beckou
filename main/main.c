@@ -348,7 +348,7 @@ int main()
                 // printf("\n Expected color = %d", expectedColor);
                 // printf("\n Pressed color = %d", pressedColor);
 
-                if (pressedColor == COR_B && expectedColor == LED_B)
+                if (expectedColor == LED_B)
                 {
 
                     gpio_put(LED_B, 1);
@@ -368,7 +368,7 @@ int main()
                 pressedColor = COR_G;
                 // printf("\n Expected color = %d", expectedColor);
                 // printf("\n Pressed color = %d", pressedColor);
-                if (pressedColor == COR_G && expectedColor == LED_G)
+                if (expectedColor == LED_G)
                 {
 
                     gpio_put(LED_G, 1);
@@ -389,7 +389,7 @@ int main()
                 // printf("\n Expected color = %d", expectedColor);
                 // printf("\n Pressed color = %d", pressedColor);
 
-                if (pressedColor == COR_Y && (expectedColor == COR_Y))
+                if (expectedColor == COR_Y)
                 {
                     pressedColor = COR_Y;
                     gpio_put(LED_Y, 1);
@@ -411,7 +411,7 @@ int main()
                 // printf("\n Pressed color = %d", pressedColor);
 
                 pressedColor = COR_R;
-                if (pressedColor == COR_R && (expectedColor == COR_R))
+                if (expectedColor == COR_R)
                 {
                     pressedColor = COR_R;
                     gpio_put(LED_R, 1);
