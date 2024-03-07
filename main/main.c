@@ -47,7 +47,7 @@ int volatile flag_f_G = 0;
 
 void btn_callback(uint gpio, uint32_t events)
 {
-    static uint64_t lastInterruptTime = 0;
+    uint64_t lastInterruptTime = 0;
     uint64_t currentTime = to_us_since_boot(get_absolute_time());
 
     // Verifica se o intervalo desde a última interrupção é maior que o delay de debouncing
