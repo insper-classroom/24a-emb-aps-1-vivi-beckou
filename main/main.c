@@ -310,7 +310,7 @@ int main()
 {
     int lenght = -1;
     int vel = 1000; 
-    int score = 0; 
+    int score = -1; 
 
 
     setup();
@@ -325,6 +325,7 @@ int main()
 
         // add nova cor na seq
         // printf("add nova cor na seq");
+        score++;
         addColor(&lenght);
 
         // tocar a sequencia
@@ -437,7 +438,6 @@ int main()
             if (pressedColor == expectedColor)
             {
                 userIndex++; // Avança para a próxima cor na sequência se acertar
-                score++;
 
                 if(userIndex > lenght){ // aumenta dificudade do jogo para a prox rodada
                     if (vel > 300){
@@ -458,7 +458,7 @@ int main()
                 lenght = -1; 
                 userIndex = 0; 
                 vel = 1000; 
-                score = 0; 
+                score = -1; 
                 sleep_ms(1000); 
                 start_us = to_us_since_boot(get_absolute_time());
                 srand(start_us); 
