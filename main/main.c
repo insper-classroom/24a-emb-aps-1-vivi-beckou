@@ -32,9 +32,9 @@ const int BLUE_FREQ = 500;
 const int YELLOW_FREQ = 600;
 
 int selectedColor = -1;
-int colors[100]; // Adjust the size as neede
 int btn_colors[100];
-volatile int randomIndex = 0;
+volatile int colors[100]; // Adjust the size as neede
+
 
 #define DEBOUNCE_DELAY_MS 200 // Defina o delay de debouncing para 200 milissegundos
 
@@ -181,7 +181,7 @@ void addColor(int *lenght)
     // time_t seed = get_absolute_time; 
     // srand(seed); 
 
-    randomIndex = rand() % 4;
+    int randomIndex = rand() % 4;
     *lenght += 1;
     colors[*lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
 
@@ -311,6 +311,7 @@ int main()
     int lenght = -1;
     int vel = 1000; 
     int score = 0; 
+
 
     setup();
 
