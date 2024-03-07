@@ -229,7 +229,7 @@ void endGame()
     sleep_ms(500); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
     printf("ERROU SEQUENCIA - end game");
     gpio_put(LED_R, 1);
-    sound(RED_FREQ, 5000, BUZZ); // Toca o som por 3 segundos
+    sound(RED_FREQ, 4000, BUZZ); // Toca o som por 3 segundos
     gpio_put(LED_R, 0);
     sleep_ms(1000); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
 }
@@ -276,7 +276,6 @@ int main()
 
                     gpio_put(LED_B, 1);
                     sound(BLUE_FREQ, 300, BUZZ);
-                    flag_f_B = 0;
                     gpio_put(LED_B, 0);
                 }
                 else
@@ -284,6 +283,7 @@ int main()
                     // gpio_put(LED_R, 1);
                     endGame();
                 }
+                flag_f_B = 0;
             }
             else if (flag_f_G)
             {
@@ -295,13 +295,13 @@ int main()
 
                     gpio_put(LED_G, 1);
                     sound(GREEN_FREQ, 300, BUZZ);
-                    flag_f_G = 0;
                     gpio_put(LED_G, 0);
                 }
                 else
                 {
                     endGame();
                 }
+                flag_f_G = 0;
             }
             else if (flag_f_Y)
             {
@@ -315,7 +315,6 @@ int main()
                     pressedColor = COR_Y;
                     gpio_put(LED_Y, 1);
                     sound(YELLOW_FREQ, 300, BUZZ);
-                    flag_f_Y = 0;
                     gpio_put(LED_Y, 0);
                 }
                 else
@@ -323,6 +322,8 @@ int main()
                     // gpio_put(LED_R, 1);
                     endGame();
                 }
+                flag_f_Y = 0;
+
             }
             else if (flag_f_R)
             {
@@ -335,7 +336,6 @@ int main()
                     pressedColor = COR_R;
                     gpio_put(LED_R, 1);
                     sound(RED_FREQ, 300, BUZZ);
-                    flag_f_R = 0;
                     gpio_put(LED_R, 0);
                 }
                 else
@@ -343,6 +343,8 @@ int main()
                     // gpio_put(LED_R, 1);
                     endGame();
                 }
+                flag_f_R = 0;
+
             }
             else
             {
@@ -360,78 +362,18 @@ int main()
             {
 
                 printf("jogo terminado"); // Termina o jogo se a cor pressionada não corresponder
-                return 0;
+                for(int i = 0; i<=lenght; i++){
+                    colors[i] = 0; 
+                }
+                lenght = -1; 
+                userIndex = 0; 
+                beepToStart(); // sinaliza que vai recomeçar o jogo 
+                // return 0;
             }
         }
 
-        sleep_ms(100); // Pequena pausa para não sobrecarregar o loop
+        sleep_ms(500); // Pequena pausa para não sobrecarregar o loop
     }
 }
 
 
-// Se sair do loop, o usuário acertou toda a sequência
-// Aqui, pode-se adicionar uma nova cor à sequência e repetir o processo
-
-// int userIndex = 0;
-// // espera inputs
-// //for (int i = 0; i <= lenght; i++) {
-//     // Verifica se o botão correspondente foi pressionado
-//     while (userIndex <= lenght) {
-
-//         for (int i = 0; i <= lenght; i++){
-//                 printf("color[i] = %ld", colors[userIndex]);
-//             if (flag_f_B) {
-//                 if (btn_colors[i] == colors[userIndex]) {
-//                     gpio_put(LED_B, 1);
-//                     sound(BLUE_FREQ, 300, BUZZ);
-//                     flag_f_B = 0;
-//                     gpio_put(LED_B, 0);
-//                     userIndex++;
-
-//                 } else {
-//                     endGame();
-//                     return 0;
-//                 }
-//             } else if (flag_f_G) {
-//                 if (btn_colors[i] == colors[userIndex]) {
-//                     gpio_put(LED_G, 1);
-//                     sound(GREEN_FREQ, 300, BUZZ);
-//                     flag_f_G = 0;
-//                     gpio_put(LED_G, 0);
-//                     userIndex++;
-
-//                 } else {
-//                     endGame();
-//                     return 0;
-//                 }
-//             } else if (flag_f_Y) {
-//                 if (btn_colors[i] == colors[userIndex]) {
-//                     gpio_put(LED_Y, 1);
-//                     sound(YELLOW_FREQ, 300, BUZZ);
-//                     flag_f_Y = 0;
-//                     gpio_put(LED_Y, 0);
-//                     userIndex++;
-
-//                 } else {
-//                     endGame();
-//                     return 0;
-//                 }
-//             } else if (flag_f_R) {
-//                 if (btn_colors[i] == colors[userIndex]) {
-//                     gpio_put(LED_R, 1);
-//                     sound(RED_FREQ, 300, BUZZ);
-//                     flag_f_R = 0;
-//                     gpio_put(LED_R, 0);
-//                     userIndex++;
-
-//                 } else {
-//                     endGame();
-//                     return 0;
-//                 }
-//             }
-//     }
-
-//         }
-
-//     sleep_ms(500);  // Adicione um atraso entre os LEDs e sons
-// }
