@@ -35,7 +35,6 @@ int selectedColor = -1;
 int colors[100]; // Adjust the size as neede
 int btn_colors[100];
 volatile int randomIndex = 0;
-volatile int score = 0;
 
 #define DEBOUNCE_DELAY_MS 200 // Defina o delay de debouncing para 200 milissegundos
 
@@ -292,16 +291,16 @@ void setup()
 
 // Função para encerrar o jogo
 
-void scoreSound(int score){
-    int scoreCounting = 0;
-    while (scoreCounting <= score){
+void scoreSound(int score){ // toca o som dos pontos
+    for (int i = 0; i < score; i++){
         gpio_put(LED_Y, 1);
+        sound(NOTE_B0, 500, BUZZ); 
         gpio_put(LED_Y, 0);
-        scoreCounting++;
+        sleep_ms(200); 
     }
-
 }
-void endGame()
+
+void endGame(int score)
 {
     sleep_ms(500); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
     printf("ERROU SEQUENCIA - end game");
@@ -309,11 +308,6 @@ void endGame()
     // sound(RED_FREQ, 800, BUZZ); // Toca o som por 3 segundos
     playMarioGameOver(); 
     gpio_put(LED_R, 0);
-    // for (int i =0; i < score; i++){
-    //     gpio_put(LED_B, 1);
-    //     sound(BLUE_FREQ, 100, BUZZ);
-    //     gpio_put(LED_B, 0);
-    // }
     scoreSound(score);
     
     sleep_ms(1000); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
@@ -323,6 +317,7 @@ int main()
 {
     int lenght = -1;
     int vel = 1000; 
+    int score = 0; 
 
     setup();
 
@@ -366,11 +361,12 @@ int main()
                     gpio_put(LED_B, 1);
                     sound(BLUE_FREQ, 300, BUZZ);
                     gpio_put(LED_B, 0);
+
                 }
                 else
                 {
                     // gpio_put(LED_R, 1);
-                    endGame();
+                    endGame(score);
                 }
                 flag_f_B = 0;
             }
@@ -385,10 +381,11 @@ int main()
                     gpio_put(LED_G, 1);
                     sound(GREEN_FREQ, 300, BUZZ);
                     gpio_put(LED_G, 0);
+
                 }
                 else
                 {
-                    endGame();
+                    endGame(score);
                 }
                 flag_f_G = 0;
             }
@@ -405,11 +402,12 @@ int main()
                     gpio_put(LED_Y, 1);
                     sound(YELLOW_FREQ, 300, BUZZ);
                     gpio_put(LED_Y, 0);
+
                 }
                 else
                 {
                     // gpio_put(LED_R, 1);
-                    endGame();
+                    endGame(score);
                 }
                 flag_f_Y = 0;
 
@@ -430,7 +428,7 @@ int main()
                 else
                 {
                     // gpio_put(LED_R, 1);
-                    endGame();
+                    endGame(score);
                 }
                 flag_f_R = 0;
 
@@ -466,6 +464,7 @@ int main()
                 lenght = -1; 
                 userIndex = 0; 
                 vel = 1000; 
+                score = 0; 
                 sleep_ms(1000); 
                 start_us = to_us_since_boot(get_absolute_time());
                 srand(start_us); 
