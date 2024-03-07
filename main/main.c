@@ -4,6 +4,7 @@
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "math.h"
+#include "melody.h"
 
 // definindo onde estao os botoes e leds
 
@@ -34,6 +35,7 @@ int selectedColor = -1;
 int colors[100]; // Adjust the size as neede
 int btn_colors[100];
 volatile int randomIndex = 0;
+volatile int score = 0;
 
 #define DEBOUNCE_DELAY_MS 200 // Defina o delay de debouncing para 200 milissegundos
 
@@ -42,6 +44,7 @@ int volatile flag_f_Y = 0;
 int volatile flag_f_R = 0;
 int volatile flag_f_B = 0;
 int volatile flag_f_G = 0;
+
 
 void btn_callback(uint gpio, uint32_t events)
 {
@@ -91,6 +94,65 @@ void sound(int freq, int tempo, int pin_b)
         sleep_us(periodo / 2);
     }
 }
+
+// Função para tocar a melodia do Mario
+void playMarioGameOver()
+{
+    // Código da melodia do Mario (substitua pelos valores corretos)
+    int melody[] = {
+        NOTE_E7, NOTE_E7, 0, NOTE_E7,
+        0, NOTE_C7, NOTE_E7, 0,
+        NOTE_G7, 0, 0,  0,
+        NOTE_G6, 0, 0, 0,
+
+        NOTE_C7, 0, 0, NOTE_G6,
+        0, 0, NOTE_E6, 0,
+        0, NOTE_A6, 0, NOTE_B6,
+        0, NOTE_AS6, NOTE_A6, 0,
+
+        NOTE_G6, NOTE_E7, NOTE_G7,
+        NOTE_A7, 0, NOTE_F7, NOTE_G7,
+        0, NOTE_E7, 0, NOTE_C7,
+        NOTE_D7, NOTE_B6, 0, 0,
+
+        NOTE_C7, 0, 0, NOTE_G6,
+        0, 0, NOTE_E6, 0,
+        0, NOTE_A6, 0, NOTE_B6,
+        0, NOTE_AS6, NOTE_A6, 0,
+
+        NOTE_G6, NOTE_E7, NOTE_G7,
+        NOTE_A7, 0, NOTE_F7, NOTE_G7,
+        0, NOTE_E7, 0, NOTE_C7,
+        NOTE_D7, NOTE_B6, 0, 0
+    };
+
+
+    int noteDuration = 250;
+    int pauseBetweenNotes = 40;
+    int startTime = to_ms_since_boot(get_absolute_time());  // Obtém o tempo de início em milissegundos
+
+    for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++)
+    {
+        int note = melody[i];
+
+        if (note == 0)
+        {
+            sleep_ms(pauseBetweenNotes);
+        }
+        else
+        {
+            sound(note, noteDuration, BUZZ);
+            sleep_ms(pauseBetweenNotes);
+        }
+
+        // Verifica se o tempo de execução ultrapassou 3 segundos
+        if ((to_ms_since_boot(get_absolute_time()) - startTime) >= 4000)
+        {
+            break;
+        }
+    }
+}
+
 
 void beepToStart()
 {
@@ -229,19 +291,38 @@ void setup()
 }
 
 // Função para encerrar o jogo
+
+void scoreSound(int score){
+    int scoreCounting = 0;
+    while (scoreCounting <= score){
+        gpio_put(LED_Y, 1);
+        gpio_put(LED_Y, 0);
+        scoreCounting++;
+    }
+
+}
 void endGame()
 {
     sleep_ms(500); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
     printf("ERROU SEQUENCIA - end game");
     gpio_put(LED_R, 1);
-    sound(RED_FREQ, 4000, BUZZ); // Toca o som por 3 segundos
+    // sound(RED_FREQ, 800, BUZZ); // Toca o som por 3 segundos
+    playMarioGameOver(); 
     gpio_put(LED_R, 0);
+    // for (int i =0; i < score; i++){
+    //     gpio_put(LED_B, 1);
+    //     sound(BLUE_FREQ, 100, BUZZ);
+    //     gpio_put(LED_B, 0);
+    // }
+    scoreSound(score);
+    
     sleep_ms(1000); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
 }
 
 int main()
 {
     int lenght = -1;
+    
 
     setup();
 
@@ -364,6 +445,7 @@ int main()
             if (pressedColor == expectedColor)
             {
                 userIndex++; // Avança para a próxima cor na sequência se acertar
+                score++;
                 // Opcional: Feedback visual/sonoro de sucesso
             }
             else
@@ -375,12 +457,15 @@ int main()
                 }
                 lenght = -1; 
                 userIndex = 0; 
+                sleep_ms(1000); 
+                start_us = to_us_since_boot(get_absolute_time());
+                srand(start_us); 
                 beepToStart(); // sinaliza que vai recomeçar o jogo 
                 // return 0;
             }
         }
 
-        sleep_ms(500); // Pequena pausa para não sobrecarregar o loop
+        sleep_ms(600); // Pequena pausa para não sobrecarregar o loop
     }
 }
 
