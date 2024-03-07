@@ -21,6 +21,7 @@ const int BUTTON_Y = 18;
 const int BUTTON_R = 19;
 const int BUTTON_B = 16;
 const int BUTTON_G = 17;
+// const int BUTTON_START = 
 
 const int BUZZ = 3;
 
@@ -115,6 +116,7 @@ void addColor(int *lenght)
 {
 
     int leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
+    // srand(seed); ---> seed = time_start (tempo em que a pessoa aperta o botão de start)
     randomIndex = rand() % 4;                   // Gera um índice aleatório entre 0 e 3
     // printf('cor = %lf', randomIndex);
     *lenght += 1;
