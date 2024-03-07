@@ -30,7 +30,6 @@ const int BLUE_FREQ = 500;
 const int YELLOW_FREQ = 600;
 
 int selectedColor = -1;
-int lenght = -1;
 int colors[100]; // Adjust the size as neede
 int btn_colors[100];
 volatile int randomIndex = 0;
@@ -112,18 +111,18 @@ void beepToStart()
 //     return colors;
 // }
 
-void addColor()
+void addColor(int *lenght)
 {
 
     int leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
     randomIndex = rand() % 4;                   // Gera um índice aleatório entre 0 e 3
     // printf('cor = %lf', randomIndex);
-    lenght += 1;
-    colors[lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
+    *lenght += 1;
+    colors[*lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
     // printf("lenseq = %ld\n", lenght);
     // printf("colors[len] = %ld\n", colors[lenght] );
     printf("\nA sequencia");
-    for (int i = 0; i < lenght; i++)
+    for (int i = 0; i < *lenght; i++)
     {
         printf("E\nlemento da sequencia %d: %d\n", i, colors[i]);
     }
@@ -145,7 +144,7 @@ void addColor()
     }
 }
 
-void playSequence()
+void playSequence(int lenght)
 {
     printf("Tamanho da sequencia a ser todacada: %d", lenght);
     for (int i = 0; i <= lenght; i++)
@@ -227,6 +226,7 @@ void setup()
 // Função para encerrar o jogo
 void endGame()
 {
+    sleep_ms(500); // Adicione um atraso antes de reiniciar o jogo ou realizar outras ações
     printf("ERROU SEQUENCIA - end game");
     gpio_put(LED_R, 1);
     sound(RED_FREQ, 5000, BUZZ); // Toca o som por 3 segundos
@@ -236,6 +236,8 @@ void endGame()
 
 int main()
 {
+    int lenght = -1;
+
     setup();
 
     beepToStart();
@@ -245,11 +247,11 @@ int main()
 
         // add nova cor na seq
         // printf("add nova cor na seq");
-        addColor();
+        addColor(&lenght);
 
         // tocar a sequencia
         // printf("tocar seq");
-        playSequence();
+        playSequence(lenght);
 
         // Supondo que a sequência 'colors' já foi gerada e tocada
         int userIndex = 0; // Índice para acompanhar qual cor na sequência o usuário está tentando acertar
@@ -362,7 +364,7 @@ int main()
             }
         }
 
-        sleep_ms(10); // Pequena pausa para não sobrecarregar o loop
+        sleep_ms(100); // Pequena pausa para não sobrecarregar o loop
     }
 }
 
