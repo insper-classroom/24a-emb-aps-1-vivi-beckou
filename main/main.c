@@ -146,7 +146,7 @@ void playMarioGameOver()
         }
 
         // Verifica se o tempo de execução ultrapassou 3 segundos
-        if ((to_ms_since_boot(get_absolute_time()) - startTime) >= 4000)
+        if ((to_ms_since_boot(get_absolute_time()) - startTime) >= 3500)
         {
             break;
         }
@@ -211,7 +211,7 @@ void addColor(int *lenght)
     }
 }
 
-void playSequence(int lenght)
+void playSequence(int lenght, int vel)
 {
     printf("Tamanho da sequencia a ser todacada: %d", lenght);
     for (int i = 0; i <= lenght; i++)
@@ -219,32 +219,32 @@ void playSequence(int lenght)
         if (colors[i] == LED_B)
         {
             gpio_put(LED_B, 1);
-            sound(BLUE_FREQ, 1000, BUZZ);
+            sound(BLUE_FREQ, vel, BUZZ);
             gpio_put(LED_B, 0);
             // flag_f_B = 1;
         }
         else if (colors[i] == LED_G)
         {
             gpio_put(LED_G, 1);
-            sound(GREEN_FREQ, 1000, BUZZ);
+            sound(GREEN_FREQ, vel, BUZZ);
             gpio_put(LED_G, 0);
             // flag_f_G = 1;
         }
         else if (colors[i] == LED_R)
         {
             gpio_put(LED_R, 1);
-            sound(RED_FREQ, 1000, BUZZ);
+            sound(RED_FREQ, vel, BUZZ);
             gpio_put(LED_R, 0);
             // flag_f_R = 1;
         }
         else if (colors[i] == LED_Y)
         {
             gpio_put(LED_Y, 1);
-            sound(YELLOW_FREQ, 1000, BUZZ);
+            sound(YELLOW_FREQ, vel, BUZZ);
             gpio_put(LED_Y, 0);
             // flag_f_Y = 1;
         }
-        sleep_us(3000);
+        sleep_ms(200);
     }
 }
 
@@ -322,7 +322,7 @@ void endGame()
 int main()
 {
     int lenght = -1;
-    
+    int vel = 1000; 
 
     setup();
 
@@ -340,7 +340,7 @@ int main()
 
         // tocar a sequencia
         // printf("tocar seq");
-        playSequence(lenght);
+        playSequence(lenght, vel);
 
         // Supondo que a sequência 'colors' já foi gerada e tocada
         int userIndex = 0; // Índice para acompanhar qual cor na sequência o usuário está tentando acertar
@@ -446,6 +446,14 @@ int main()
             {
                 userIndex++; // Avança para a próxima cor na sequência se acertar
                 score++;
+
+                if(userIndex > lenght){ // aumenta dificuldade do jogo para a prox rodada
+                    if (vel > 300){
+                        vel -= 100; 
+                    }else{
+                        vel = 300; 
+                    }
+                }
                 // Opcional: Feedback visual/sonoro de sucesso
             }
             else
@@ -457,6 +465,7 @@ int main()
                 }
                 lenght = -1; 
                 userIndex = 0; 
+                vel = 1000; 
                 sleep_ms(1000); 
                 start_us = to_us_since_boot(get_absolute_time());
                 srand(start_us); 
