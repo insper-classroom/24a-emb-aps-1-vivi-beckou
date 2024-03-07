@@ -59,22 +59,22 @@ void btn_callback(uint gpio, uint32_t events)
             if (gpio == BUTTON_B)
             {
                 flag_f_B = 1;
-                printf("apertou azul");
+                // printf("apertou azul");
             }
             else if (gpio == BUTTON_G)
             {
                 flag_f_G = 1;
-                printf("apertou verde");
+                // printf("apertou verde");
             }
             else if (gpio == BUTTON_Y)
             {
                 flag_f_Y = 1;
-                printf("apertou amarelo");
+                // printf("apertou amarelo");
             }
             else if (gpio == BUTTON_R)
             {
                 flag_f_R = 1;
-                printf("apertou vermelho");
+                // printf("apertou vermelho");
 
                 lastInterruptTime = currentTime; // Atualiza o tempo da última interrupção
             }
@@ -165,48 +165,41 @@ void beepToStart()
     sleep_us(1000000);
 }
 
-// int buildSequence(int colors[], int length) {
+// int buidSequence(int colors[], int length) {
 //     int* leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
 //     int random = leds[rand() % 4]; // Gera um índice aleatório entre 0 e 3
 //     colors[length] = random; // Adiciona o pino do LED correspondente à sequência
-//     printf('cores: %ld', colors);
+//     printf('cores: %d', colors);
 //     return colors;
 // }
 
 
 void addColor(int *lenght)
 {
-    int leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
+    const int leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
     // srand(seed); ---> seed = time_start (tempo em que a pessoa aperta o botão de start)
     // time_t seed = get_absolute_time; 
     // srand(seed); 
 
-    randomIndex = rand() % 4;                    // Gera um índice aleatório entre 0 e 3
-    // printf('cor = %lf', randomIndex);
+    randomIndex = rand() % 4;
     *lenght += 1;
     colors[*lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
-    // printf("lenseq = %ld\n", lenght);
-    // printf("colors[len] = %ld\n", colors[lenght] );
-    printf("\nA sequencia");
-    for (int i = 0; i < *lenght; i++)
-    {
-        printf("E\nlemento da sequencia %d: %d\n", i, colors[i]);
-    }
+
     if (leds[randomIndex] == 0)
     {
-        btn_colors[COR_B];
+        btn_colors[LED_B];
     }
     else if (leds[randomIndex] == 1)
     {
-        btn_colors[COR_G];
+        btn_colors[LED_G];
     }
     else if (leds[randomIndex] == 2)
     {
-        btn_colors[COR_R];
+        btn_colors[LED_R];
     }
     else if (leds[randomIndex] == 3)
     {
-        btn_colors[COR_Y];
+        btn_colors[LED_Y];
     }
 }
 
@@ -352,8 +345,8 @@ int main()
             {
                 pressedColor = COR_B;
 
-                printf("\n Expected color = %ld", expectedColor);
-                printf("\n Pressed color = %ld", pressedColor);
+                // printf("\n Expected color = %d", expectedColor);
+                // printf("\n Pressed color = %d", pressedColor);
 
                 if (pressedColor == COR_B && expectedColor == LED_B)
                 {
@@ -373,8 +366,8 @@ int main()
             else if (flag_f_G)
             {
                 pressedColor = COR_G;
-                printf("\n Expected color = %ld", expectedColor);
-                printf("\n Pressed color = %ld", pressedColor);
+                // printf("\n Expected color = %d", expectedColor);
+                // printf("\n Pressed color = %d", pressedColor);
                 if (pressedColor == COR_G && expectedColor == LED_G)
                 {
 
@@ -393,8 +386,8 @@ int main()
             {
 
                 pressedColor = COR_Y;
-                printf("\n Expected color = %ld", expectedColor);
-                printf("\n Pressed color = %ld", pressedColor);
+                // printf("\n Expected color = %d", expectedColor);
+                // printf("\n Pressed color = %d", pressedColor);
 
                 if (pressedColor == COR_Y && (expectedColor == COR_Y))
                 {
@@ -414,8 +407,8 @@ int main()
             }
             else if (flag_f_R)
             {
-                printf("\n Expected color = %ld", expectedColor);
-                printf("\n Pressed color = %ld", pressedColor);
+                // printf("\n Expected color = %d", expectedColor);
+                // printf("\n Pressed color = %d", pressedColor);
 
                 pressedColor = COR_R;
                 if (pressedColor == COR_R && (expectedColor == COR_R))
@@ -445,7 +438,7 @@ int main()
                 userIndex++; // Avança para a próxima cor na sequência se acertar
                 score++;
 
-                if(userIndex > lenght){ // aumenta dificuldade do jogo para a prox rodada
+                if(userIndex > lenght){ // aumenta dificudade do jogo para a prox rodada
                     if (vel > 300){
                         vel -= 100; 
                     }else{
