@@ -186,25 +186,10 @@ void addColor(int *lenght, int colors[])
     *lenght += 1;
     colors[*lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
 
-    // if (leds[randomIndex] == 0)
-    // {
-    //     btn_colors[LED_B];
-    // }
-    // else if (leds[randomIndex] == 1)
-    // {
-    //     btn_colors[LED_G];
-    // }
-    // else if (leds[randomIndex] == 2)
-    // {
-    //     btn_colors[LED_R];
-    // }
-    // else if (leds[randomIndex] == 3)
-    // {
-    //     btn_colors[LED_Y];
-    // }
+    
 }
 
-void playSequence(int lenght, int vel, int colors[])
+void playSequence(int lenght, int vel, const int colors[])
 {
     printf("Tamanho da sequencia a ser todacada: %d", lenght);
     for (int i = 0; i <= lenght; i++)
