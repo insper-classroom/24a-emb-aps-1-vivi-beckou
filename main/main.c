@@ -33,7 +33,6 @@ const int YELLOW_FREQ = 600;
 
 int selectedColor = -1;
 int btn_colors[100];
-volatile int colors[100]; // Adjust the size as neede
 
 
 #define DEBOUNCE_DELAY_MS 200 // Defina o delay de debouncing para 200 milissegundos
@@ -44,10 +43,12 @@ int volatile flag_f_R = 0;
 int volatile flag_f_B = 0;
 int volatile flag_f_G = 0;
 
+volatile uint64_t lastInterruptTime = 0;
+
+
 
 void btn_callback(uint gpio, uint32_t events)
 {
-    uint64_t lastInterruptTime = 0;
     uint64_t currentTime = to_us_since_boot(get_absolute_time());
 
     // Verifica se o intervalo desde a última interrupção é maior que o delay de debouncing
@@ -174,7 +175,7 @@ void beepToStart()
 // }
 
 
-void addColor(int *lenght)
+void addColor(int *lenght, int colors[])
 {
     const int leds[4] = {LED_B, LED_G, LED_R, LED_Y}; // Array dos LEDs
     // srand(seed); ---> seed = time_start (tempo em que a pessoa aperta o botão de start)
@@ -185,25 +186,25 @@ void addColor(int *lenght)
     *lenght += 1;
     colors[*lenght] = leds[randomIndex]; // Adiciona o pino do LED correspondente à sequência
 
-    if (leds[randomIndex] == 0)
-    {
-        btn_colors[LED_B];
-    }
-    else if (leds[randomIndex] == 1)
-    {
-        btn_colors[LED_G];
-    }
-    else if (leds[randomIndex] == 2)
-    {
-        btn_colors[LED_R];
-    }
-    else if (leds[randomIndex] == 3)
-    {
-        btn_colors[LED_Y];
-    }
+    // if (leds[randomIndex] == 0)
+    // {
+    //     btn_colors[LED_B];
+    // }
+    // else if (leds[randomIndex] == 1)
+    // {
+    //     btn_colors[LED_G];
+    // }
+    // else if (leds[randomIndex] == 2)
+    // {
+    //     btn_colors[LED_R];
+    // }
+    // else if (leds[randomIndex] == 3)
+    // {
+    //     btn_colors[LED_Y];
+    // }
 }
 
-void playSequence(int lenght, int vel)
+void playSequence(int lenght, int vel, int colors[])
 {
     printf("Tamanho da sequencia a ser todacada: %d", lenght);
     for (int i = 0; i <= lenght; i++)
@@ -311,6 +312,8 @@ int main()
     int lenght = -1;
     int vel = 1000; 
     int score = -1; 
+    int colors[100]; // Adjust the size as neede
+
 
 
     setup();
@@ -326,11 +329,11 @@ int main()
         // add nova cor na seq
         // printf("add nova cor na seq");
         score++;
-        addColor(&lenght);
+        addColor(&lenght, colors);
 
         // tocar a sequencia
         // printf("tocar seq");
-        playSequence(lenght, vel);
+        playSequence(lenght, vel, colors);
 
         // Supondo que a sequência 'colors' já foi gerada e tocada
         int userIndex = 0; // Índice para acompanhar qual cor na sequência o usuário está tentando acertar
